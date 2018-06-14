@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {animate, group, keyframes, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     trigger('divState', [
       state('normal', style({
         'background-color': 'red',
-        transform: 'translateX(0)'
+        transform: 'translateX(0px)'
       })),
       state('highlighted', style({
         'background-color': 'blue',
@@ -20,7 +20,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     trigger('wildState', [
       state('normal', style({
         'background-color': 'red',
-        transform: 'translateX(0) scale (1)'
+        transform: 'translateX(0px) scale (1)'
       })),
       state('highlighted', style({
         'background-color': 'blue',
@@ -28,7 +28,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       })),
       state('shrunken', style({
         'background-color': 'green',
-        transform: 'translateX(0) scale(0.5)'
+        transform: 'translateX(0px) scale(0.5)'
       })),
       transition('normal => highlighted', animate(300)),
       transition('highlighted => normal', animate(800)),
@@ -45,7 +45,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     trigger('list1', [
       state('in', style({
         opacity: 1,
-        transform: 'translateX(0)'
+        transform: 'translateX(0px)'
       })),
       transition('void => *', [
         style({
@@ -57,8 +57,49 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       transition('* => void', [
         animate(300, style({
           transform: 'translateX(100px)',
-          opacity: 0,
+          opacity: 0
         }))
+      ])
+    ]),
+    trigger('list2', [
+      state('in', style({
+        opacity: 1,
+        transform: 'translateX(0px)'
+      })),
+      transition('void => *', [
+        animate(1000, keyframes([
+          style({
+            transform: 'translateX(-100px)',
+            opacity: 0,
+            offset: 0
+          }),
+          style({
+            transform: 'translateX(-50px)',
+            opacity: 0.5,
+            offset: 0.3
+          }),
+          style({
+            transform: 'translateX(-20px)',
+            opacity: 1,
+            offset: 0.8
+          }),
+          style({
+            transform: 'translateX(0px)',
+            opacity: 1,
+            offset: 1
+          })
+        ]))
+      ]),
+      transition('* => void', [
+        group([
+          animate(300, style({
+            color: 'red'
+          })),
+          animate(800, style({
+            transform: 'translateX(100px)',
+            opacity: 0
+          }))
+        ])
       ])
     ]),
   ]
@@ -82,6 +123,14 @@ export class AppComponent {
   }
 
   onDelete(item) {
-    this.list.splice(this.list.indexOf(item),1);
+    this.list.splice(this.list.indexOf(item), 1);
+  }
+
+  animationStarted(event) {
+    console.log(event);
+  }
+
+  animationEnded(event) {
+    console.log(event);
   }
 }
